@@ -72,40 +72,19 @@ function CollectionPage() {
     useEffect(() => {
         if (!window.visualViewport) return;
 
-        const updateSearchPosition = () => {
+        const detectKeyboard = () => {
             const vv = window.visualViewport;
             const keyboardHeight = window.innerHeight - vv.height;
             const isKeyboard = keyboardHeight > 100;
-
             setKeyboardVisible(isKeyboard);
-
-            // Position search popup above keyboard when visible
-            const searchPopup = document.querySelector('.collection-page__search-popup');
-            if (searchPopup && isKeyboard) {
-                const searchHeight = searchPopup.offsetHeight || 50;
-                searchPopup.style.position = 'fixed';
-                searchPopup.style.top = `${vv.offsetTop + vv.height - searchHeight}px`;
-                searchPopup.style.bottom = 'auto';
-                searchPopup.style.left = '0';
-                searchPopup.style.right = '0';
-                searchPopup.style.zIndex = '100';
-            } else if (searchPopup) {
-                // Reset to normal positioning (above footer)
-                searchPopup.style.position = '';
-                searchPopup.style.top = '';
-                searchPopup.style.bottom = '';
-                searchPopup.style.left = '';
-                searchPopup.style.right = '';
-                searchPopup.style.zIndex = '';
-            }
         };
 
-        window.visualViewport.addEventListener('resize', updateSearchPosition);
-        window.visualViewport.addEventListener('scroll', updateSearchPosition);
+        window.visualViewport.addEventListener('resize', detectKeyboard);
+        window.visualViewport.addEventListener('scroll', detectKeyboard);
 
         return () => {
-            window.visualViewport.removeEventListener('resize', updateSearchPosition);
-            window.visualViewport.removeEventListener('scroll', updateSearchPosition);
+            window.visualViewport.removeEventListener('resize', detectKeyboard);
+            window.visualViewport.removeEventListener('scroll', detectKeyboard);
         };
     }, []);
 
@@ -377,66 +356,68 @@ function CollectionPage() {
                 theme={theme}
             />
 
-            {/* Fixed Footer */}
-            <footer
-                ref={footerRef}
-                className={`collection-page__footer ${sidebarOpen ? 'sidebar-open' : ''}`}
-            >
-                {/* Search popup - appears above footer when open */}
-                {searchOpen && (
-                    <div className={`collection-page__search-popup ${sidebarOpen ? 'sidebar-open' : ''}`}>
-                        <TerminalSearch onSearch={handleTerminalSearch} onClear={handleSearchClear} />
-                    </div>
-                )}
+            {/* Fixed Footer - hidden when keyboard is open */}
+            {!keyboardVisible && (
+                <footer
+                    ref={footerRef}
+                    className={`collection-page__footer ${sidebarOpen ? 'sidebar-open' : ''}`}
+                >
+                    {/* Search popup - appears above footer when open */}
+                    {searchOpen && (
+                        <div className={`collection-page__search-popup ${sidebarOpen ? 'sidebar-open' : ''}`}>
+                            <TerminalSearch onSearch={handleTerminalSearch} onClear={handleSearchClear} />
+                        </div>
+                    )}
 
-                <div className="collection-page__footer-content">
-                    <div className="collection-page__btc-price">
-                        <span className="collection-page__btc-icon">₿</span>
-                        <span className="collection-page__btc-value">
-                            ${btcPrice ? btcPrice.toLocaleString() : '---'}
-                        </span>
-                        <span className="collection-page__sats">
-                            1 sats/vB
-                        </span>
-                    </div>
+                    <div className="collection-page__footer-content">
+                        <div className="collection-page__btc-price">
+                            <span className="collection-page__btc-icon">₿</span>
+                            <span className="collection-page__btc-value">
+                                ${btcPrice ? btcPrice.toLocaleString() : '---'}
+                            </span>
+                            <span className="collection-page__sats">
+                                1 sats/vB
+                            </span>
+                        </div>
 
-                    <div className="collection-page__footer-actions">
-                        <button
-                            className={`collection-page__search-toggle ${searchOpen ? 'active' : ''}`}
-                            onClick={() => setSearchOpen(!searchOpen)}
-                        >
-                            <span className="collection-page__search-toggle-icon">&gt;</span>
-                        </button>
-                        <button
-                            className="collection-page__theme-toggle"
-                            onClick={() => {
-                                const newTheme = theme === 'dark' ? 'light' : 'dark';
-                                setTheme(newTheme);
-                                localStorage.setItem('theme', newTheme);
-                            }}
-                        >
-                            {theme === 'dark' ? (
-                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                                    <circle cx="12" cy="12" r="5" />
-                                    <line x1="12" y1="1" x2="12" y2="3" />
-                                    <line x1="12" y1="21" x2="12" y2="23" />
-                                    <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" />
-                                    <line x1="18.36" y1="18.36" x2="19.78" y2="19.78" />
-                                    <line x1="1" y1="12" x2="3" y2="12" />
-                                    <line x1="21" y1="12" x2="23" y2="12" />
-                                    <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" />
-                                    <line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
-                                </svg>
-                            ) : (
-                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                                    <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
-                                </svg>
-                            )}
-                        </button>
+                        <div className="collection-page__footer-actions">
+                            <button
+                                className={`collection-page__search-toggle ${searchOpen ? 'active' : ''}`}
+                                onClick={() => setSearchOpen(!searchOpen)}
+                            >
+                                <span className="collection-page__search-toggle-icon">&gt;</span>
+                            </button>
+                            <button
+                                className="collection-page__theme-toggle"
+                                onClick={() => {
+                                    const newTheme = theme === 'dark' ? 'light' : 'dark';
+                                    setTheme(newTheme);
+                                    localStorage.setItem('theme', newTheme);
+                                }}
+                            >
+                                {theme === 'dark' ? (
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                        <circle cx="12" cy="12" r="5" />
+                                        <line x1="12" y1="1" x2="12" y2="3" />
+                                        <line x1="12" y1="21" x2="12" y2="23" />
+                                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" />
+                                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78" />
+                                        <line x1="1" y1="12" x2="3" y2="12" />
+                                        <line x1="21" y1="12" x2="23" y2="12" />
+                                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" />
+                                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
+                                    </svg>
+                                ) : (
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+                                    </svg>
+                                )}
+                            </button>
+                        </div>
                     </div>
-                </div>
-            </footer >
-        </div >
+                </footer>
+            )}
+        </div>
     )
 }
 
