@@ -371,23 +371,6 @@ function CollectionPage() {
                 theme={theme}
             />
 
-            {/* Keyboard Blocker - covers the gap below footer on iOS when keyboard is open */}
-            {keyboardVisible && (
-                <div
-                    className="collection-page__keyboard-blocker"
-                    style={{
-                        position: 'fixed',
-                        bottom: 0,
-                        left: 0,
-                        right: 0,
-                        height: '50vh',
-                        background: 'var(--bg-elevated)',
-                        zIndex: 49,
-                        pointerEvents: 'none'
-                    }}
-                />
-            )}
-
             {/* Fixed Footer */}
             <footer
                 ref={footerRef}
