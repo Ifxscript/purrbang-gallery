@@ -66,6 +66,10 @@ function TerminalSearch({ onSearch, onClear }) {
                         if (output) {
                             setOutput(null);
                         }
+                        // Scroll input into view after keyboard opens (mobile fix)
+                        setTimeout(() => {
+                            inputRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                        }, 300);
                     }}
                     onBlur={() => setIsFocused(false)}
                     placeholder={!output ? "search by cat # or inscription id..." : ""}
