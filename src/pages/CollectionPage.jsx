@@ -30,6 +30,28 @@ function CollectionPage() {
     const [searchResult, setSearchResult] = useState(null);
     const [searchOpen, setSearchOpen] = useState(false);
 
+    // Mobile keyboard detection
+    const [keyboardOffset, setKeyboardOffset] = useState(0);
+
+    // Handle mobile keyboard showing/hiding
+    useEffect(() => {
+        if (!window.visualViewport) return;
+
+        const handleResize = () => {
+            const viewport = window.visualViewport;
+            const offset = window.innerHeight - viewport.height;
+            setKeyboardOffset(offset > 50 ? offset : 0); // Only apply if significant (keyboard open)
+        };
+
+        window.visualViewport.addEventListener('resize', handleResize);
+        window.visualViewport.addEventListener('scroll', handleResize);
+
+        return () => {
+            window.visualViewport.removeEventListener('resize', handleResize);
+            window.visualViewport.removeEventListener('scroll', handleResize);
+        };
+    }, []);
+
     // Load traits data
     useEffect(() => {
         fetch('/all-traits.json')
@@ -299,7 +321,10 @@ function CollectionPage() {
             />
 
             {/* Fixed Footer */}
-            <footer className={`collection-page__footer ${sidebarOpen ? 'sidebar-open' : ''}`}>
+            <footer
+                className={`collection-page__footer ${sidebarOpen ? 'sidebar-open' : ''}`}
+                style={{ bottom: keyboardOffset > 0 ? `${keyboardOffset}px` : '0' }}
+            >
                 {/* Search popup - appears above footer when open */}
                 {searchOpen && (
                     <div className={`collection-page__search-popup ${sidebarOpen ? 'sidebar-open' : ''}`}>
