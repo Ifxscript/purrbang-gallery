@@ -95,15 +95,17 @@ function CollectionPage() {
                 searchPopup.style.borderBottom = 'none';
                 searchPopup.style.background = 'var(--bg-elevated)';
                 searchPopup.style.margin = '0';
-                searchPopup.style.padding = '0 12px';
+                searchPopup.style.padding = '0';
 
-                // Also reduce inner terminal search padding
+                // Remove all margins and padding from inner elements
                 if (terminalSearch) {
-                    terminalSearch.style.padding = '8px 12px';
+                    terminalSearch.style.padding = '10px 12px';
                     terminalSearch.style.margin = '0';
+                    terminalSearch.style.borderRadius = '0';
+                    terminalSearch.style.border = 'none';
                 }
                 if (outputEl) {
-                    outputEl.style.marginTop = '2px';
+                    outputEl.style.marginTop = '0';
                 }
             } else if (searchPopup) {
                 // Reset to normal positioning (above footer)
@@ -121,6 +123,8 @@ function CollectionPage() {
                 if (terminalSearch) {
                     terminalSearch.style.padding = '';
                     terminalSearch.style.margin = '';
+                    terminalSearch.style.borderRadius = '';
+                    terminalSearch.style.border = '';
                 }
                 if (outputEl) {
                     outputEl.style.marginTop = '';
