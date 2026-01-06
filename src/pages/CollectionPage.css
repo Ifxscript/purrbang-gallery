@@ -103,12 +103,16 @@
 .collection-page__footer {
     position: fixed;
     bottom: 0;
+    bottom: env(safe-area-inset-bottom, 0);
+    /* iOS safe area */
     left: 0;
     right: 0;
     background: var(--bg-elevated);
     border-top: 1px solid var(--border-default);
     z-index: 50;
     font-family: 'Courier New', Courier, monospace;
+    padding-bottom: env(safe-area-inset-bottom, 0);
+    /* Extra padding for safe area */
 }
 
 .collection-page__footer-content {
