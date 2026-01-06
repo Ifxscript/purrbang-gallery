@@ -46,11 +46,17 @@ function CollectionPage() {
             setKeyboardVisible(isKeyboard);
 
             if (footerRef.current && isKeyboard) {
-                // Position footer at the bottom of the visual viewport
-                const bottom = keyboardHeight - viewport.offsetTop;
-                footerRef.current.style.transform = `translateY(-${Math.max(0, bottom)}px)`;
+                // Position footer at exact bottom of visual viewport
+                // Use top positioning based on visual viewport
+                const footerHeight = footerRef.current.offsetHeight || 60;
+                footerRef.current.style.position = 'fixed';
+                footerRef.current.style.bottom = 'auto';
+                footerRef.current.style.top = `${viewport.offsetTop + viewport.height - footerHeight}px`;
             } else if (footerRef.current) {
-                footerRef.current.style.transform = 'translateY(0)';
+                // Reset to normal fixed bottom
+                footerRef.current.style.position = 'fixed';
+                footerRef.current.style.bottom = '0';
+                footerRef.current.style.top = 'auto';
             }
         };
 
