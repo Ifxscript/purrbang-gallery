@@ -31,24 +31,35 @@ function CollectionPage() {
     const [searchOpen, setSearchOpen] = useState(false);
 
     // Mobile keyboard detection
-    const [keyboardOffset, setKeyboardOffset] = useState(0);
+    const [keyboardVisible, setKeyboardVisible] = useState(false);
+    const footerRef = useRef(null);
 
-    // Handle mobile keyboard showing/hiding
+    // Handle mobile keyboard showing/hiding using visualViewport
     useEffect(() => {
         if (!window.visualViewport) return;
 
-        const handleResize = () => {
+        const updateFooterPosition = () => {
             const viewport = window.visualViewport;
-            const offset = window.innerHeight - viewport.height;
-            setKeyboardOffset(offset > 50 ? offset : 0); // Only apply if significant (keyboard open)
+            const keyboardHeight = window.innerHeight - viewport.height;
+            const isKeyboard = keyboardHeight > 100;
+
+            setKeyboardVisible(isKeyboard);
+
+            if (footerRef.current && isKeyboard) {
+                // Position footer at the bottom of the visual viewport
+                const bottom = keyboardHeight - viewport.offsetTop;
+                footerRef.current.style.transform = `translateY(-${Math.max(0, bottom)}px)`;
+            } else if (footerRef.current) {
+                footerRef.current.style.transform = 'translateY(0)';
+            }
         };
 
-        window.visualViewport.addEventListener('resize', handleResize);
-        window.visualViewport.addEventListener('scroll', handleResize);
+        window.visualViewport.addEventListener('resize', updateFooterPosition);
+        window.visualViewport.addEventListener('scroll', updateFooterPosition);
 
         return () => {
-            window.visualViewport.removeEventListener('resize', handleResize);
-            window.visualViewport.removeEventListener('scroll', handleResize);
+            window.visualViewport.removeEventListener('resize', updateFooterPosition);
+            window.visualViewport.removeEventListener('scroll', updateFooterPosition);
         };
     }, []);
 
@@ -322,8 +333,8 @@ function CollectionPage() {
 
             {/* Fixed Footer */}
             <footer
+                ref={footerRef}
                 className={`collection-page__footer ${sidebarOpen ? 'sidebar-open' : ''}`}
-                style={{ bottom: keyboardOffset > 0 ? `${keyboardOffset}px` : '0' }}
             >
                 {/* Search popup - appears above footer when open */}
                 {searchOpen && (
