@@ -418,17 +418,18 @@ function CollectionPage() {
                 theme={theme}
             />
 
+            {/* Search popup - independent of footer, positioned above when keyboard opens */}
+            {searchOpen && (
+                <div className={`collection-page__search-popup ${sidebarOpen ? 'sidebar-open' : ''}`}>
+                    <TerminalSearch onSearch={handleTerminalSearch} onClear={handleSearchClear} />
+                </div>
+            )}
+
             {/* Fixed Footer */}
             <footer
                 ref={footerRef}
                 className={`collection-page__footer ${sidebarOpen ? 'sidebar-open' : ''}`}
             >
-                {/* Search popup - appears above footer when open */}
-                {searchOpen && (
-                    <div className={`collection-page__search-popup ${sidebarOpen ? 'sidebar-open' : ''}`}>
-                        <TerminalSearch onSearch={handleTerminalSearch} onClear={handleSearchClear} />
-                    </div>
-                )}
 
                 <div className="collection-page__footer-content">
                     <div className="collection-page__btc-price">
