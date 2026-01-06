@@ -89,8 +89,10 @@ function CollectionPage() {
                 searchPopup.style.left = '0';
                 searchPopup.style.right = '0';
                 searchPopup.style.zIndex = '100';
-                searchPopup.style.borderBottom = 'none'; // Remove border when floating
+                searchPopup.style.borderBottom = 'none';
                 searchPopup.style.background = 'var(--bg-elevated)';
+                searchPopup.style.margin = '0';
+                searchPopup.style.padding = '0 24px';
             } else if (searchPopup) {
                 // Reset to normal positioning (above footer)
                 searchPopup.style.position = '';
@@ -101,6 +103,8 @@ function CollectionPage() {
                 searchPopup.style.zIndex = '';
                 searchPopup.style.borderBottom = '';
                 searchPopup.style.background = '';
+                searchPopup.style.margin = '';
+                searchPopup.style.padding = '';
             }
         };
 
