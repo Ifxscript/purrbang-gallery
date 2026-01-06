@@ -4,14 +4,32 @@
   box-sizing: border-box;
 }
 
-/* Mobile keyboard support */
+/* Mobile keyboard support - Lock and Fill approach */
 html,
 body {
   min-height: 100vh;
   min-height: -webkit-fill-available;
-  /* iOS Safari safe area */
   min-height: 100dvh;
-  /* Dynamic viewport - adjusts when mobile keyboard opens */
+  margin: 0;
+  padding: 0;
+}
+
+/* Mobile: Lock body in place, scroll happens inside container */
+@media (max-width: 768px) {
+
+  html,
+  body {
+    height: -webkit-fill-available;
+    overflow: hidden;
+    position: fixed;
+    width: 100%;
+  }
+
+  #root {
+    height: -webkit-fill-available;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+  }
 }
 
 :root {

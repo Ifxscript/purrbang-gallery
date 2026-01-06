@@ -1,11 +1,10 @@
 .collection-page {
     min-height: 100vh;
     min-height: -webkit-fill-available;
-    /* iOS Safari safe area */
     min-height: 100dvh;
-    /* Dynamic viewport height - adjusts for mobile keyboard */
     background: var(--bg-page);
     display: flex;
+    flex-direction: column;
 }
 
 /* Main Content - scrollable with fixed header/footer spacing */
@@ -101,11 +100,10 @@
     padding: 2vw;
 }
 
-/* Fixed Footer */
+/* Footer - Fixed on desktop, part of flow on mobile */
 .collection-page__footer {
     position: fixed;
-    bottom: env(safe-area-inset-bottom, 0);
-    /* iOS safe area */
+    bottom: 0;
     left: 0;
     right: 0;
     background: var(--bg-elevated);
@@ -113,7 +111,26 @@
     z-index: 50;
     font-family: 'Courier New', Courier, monospace;
     padding-bottom: env(safe-area-inset-bottom, 0);
-    /* Extra padding for safe area */
+}
+
+/* Mobile: Footer in flow, not fixed */
+@media (max-width: 768px) {
+    .collection-page {
+        height: -webkit-fill-available;
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .collection-page__footer {
+        position: sticky;
+        bottom: 0;
+        flex-shrink: 0;
+    }
+
+    .collection-page__content {
+        padding-bottom: 0;
+        /* Footer is in flow now, no extra padding needed */
+    }
 }
 
 .collection-page__footer-content {
