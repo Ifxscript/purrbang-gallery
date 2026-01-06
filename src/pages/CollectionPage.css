@@ -91,6 +91,27 @@
     margin: 4px 0 0;
 }
 
+/* Back button after search */
+.collection-page__back-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 20px;
+    margin: 0 24px 16px;
+    background: var(--bg-elevated);
+    color: var(--text-primary);
+    border: 1px solid var(--border-default);
+    border-radius: 8px;
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.collection-page__back-btn:hover {
+    background: var(--interactive-bg-hover);
+    border-color: var(--interactive-border-hover);
+}
 
 /* Grid - fixed vw card sizes, consistent regardless of sidebar */
 .collection-page__grid {

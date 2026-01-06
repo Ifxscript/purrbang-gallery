@@ -89,6 +89,8 @@ function CollectionPage() {
                 searchPopup.style.left = '0';
                 searchPopup.style.right = '0';
                 searchPopup.style.zIndex = '100';
+                searchPopup.style.borderBottom = 'none'; // Remove border when floating
+                searchPopup.style.background = 'var(--bg-elevated)';
             } else if (searchPopup) {
                 // Reset to normal positioning (above footer)
                 searchPopup.style.position = '';
@@ -97,6 +99,8 @@ function CollectionPage() {
                 searchPopup.style.left = '';
                 searchPopup.style.right = '';
                 searchPopup.style.zIndex = '';
+                searchPopup.style.borderBottom = '';
+                searchPopup.style.background = '';
             }
         };
 
@@ -346,6 +350,15 @@ function CollectionPage() {
 
             {/* Main Content */}
             <div className={`collection-page__content ${sidebarOpen ? 'sidebar-open' : ''}`}>
+                {/* Back button when viewing search result */}
+                {searchResult && (
+                    <button
+                        className="collection-page__back-btn"
+                        onClick={() => setSearchResult(null)}
+                    >
+                        ← Back to Gallery
+                    </button>
+                )}
                 <main className={`collection-page__grid ${sidebarOpen ? 'sidebar-open' : ''}`}>
                     {displayedCats.map((cat, index) => {
                         const originalIndex = allCats.findIndex(c => c.inscriptionId === cat.inscriptionId);
