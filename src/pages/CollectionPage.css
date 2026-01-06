@@ -1,10 +1,11 @@
 .collection-page {
     min-height: 100vh;
     min-height: -webkit-fill-available;
+    /* iOS Safari safe area */
     min-height: 100dvh;
+    /* Dynamic viewport height - adjusts for mobile keyboard */
     background: var(--bg-page);
     display: flex;
-    flex-direction: column;
 }
 
 /* Main Content - scrollable with fixed header/footer spacing */
@@ -100,10 +101,11 @@
     padding: 2vw;
 }
 
-/* Footer - Fixed on all screens */
+/* Fixed Footer */
 .collection-page__footer {
     position: fixed;
-    bottom: 0;
+    bottom: env(safe-area-inset-bottom, 0);
+    /* iOS safe area */
     left: 0;
     right: 0;
     background: var(--bg-elevated);
@@ -111,19 +113,7 @@
     z-index: 50;
     font-family: 'Courier New', Courier, monospace;
     padding-bottom: env(safe-area-inset-bottom, 0);
-}
-
-/* Mobile adjustments */
-@media (max-width: 768px) {
-    .collection-page {
-        height: 100%;
-        min-height: -webkit-fill-available;
-    }
-
-    .collection-page__content {
-        padding-bottom: 80px;
-        /* Extra space for footer + safe area */
-    }
+    /* Extra padding for safe area */
 }
 
 .collection-page__footer-content {

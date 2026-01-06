@@ -30,8 +30,79 @@ function CollectionPage() {
     const [searchResult, setSearchResult] = useState(null);
     const [searchOpen, setSearchOpen] = useState(false);
 
-    // Footer ref (used for scrollIntoView on mobile)
+    // Mobile keyboard detection
+    const [keyboardVisible, setKeyboardVisible] = useState(false);
     const footerRef = useRef(null);
+
+    // Handle mobile keyboard showing/hiding using visualViewport
+    // useEffect(() => {
+    //     if (!window.visualViewport) return;
+
+    //     const updateFooterPosition = () => {
+    //         const viewport = window.visualViewport;
+    //         const keyboardHeight = window.innerHeight - viewport.height;
+    //         const isKeyboard = keyboardHeight > 100;
+
+    //         setKeyboardVisible(isKeyboard);
+
+    //         if (footerRef.current && isKeyboard) {
+    //             // Position footer at exact bottom of visual viewport
+    //             // Use top positioning based on visual viewport
+    //             const footerHeight = footerRef.current.offsetHeight || 60;
+    //             footerRef.current.style.position = 'fixed';
+    //             footerRef.current.style.bottom = 'auto';
+    //             footerRef.current.style.top = `${viewport.offsetTop + viewport.height - footerHeight}px`;
+    //         } else if (footerRef.current) {
+    //             // Reset to normal fixed bottom
+    //             footerRef.current.style.position = 'fixed';
+    //             footerRef.current.style.bottom = '0';
+    //             footerRef.current.style.top = 'auto';
+    //         }
+    //     };
+
+    //     window.visualViewport.addEventListener('resize', updateFooterPosition);
+    //     window.visualViewport.addEventListener('scroll', updateFooterPosition);
+
+    //     return () => {
+    //         window.visualViewport.removeEventListener('resize', updateFooterPosition);
+    //         window.visualViewport.removeEventListener('scroll', updateFooterPosition);
+    //     };
+    // }, []);
+
+    useEffect(() => {
+        if (!window.visualViewport || !footerRef.current) return;
+
+        const footer = footerRef.current;
+
+        const updateFooterPosition = () => {
+            const vv = window.visualViewport;
+            const keyboardHeight = window.innerHeight - vv.height;
+            const isKeyboard = keyboardHeight > 100;
+
+            setKeyboardVisible(isKeyboard);
+
+            if (isKeyboard) {
+                // Stick footer to visual viewport bottom
+                const footerHeight = footer.offsetHeight || 60;
+
+                footer.style.position = 'fixed';
+                footer.style.top = `${vv.offsetTop + vv.height - footerHeight}px`;
+                footer.style.bottom = 'auto';
+            } else {
+                // 🔥 Let CSS handle safe-area again
+                footer.style.top = 'auto';
+                footer.style.bottom = '';
+            }
+        };
+
+        window.visualViewport.addEventListener('resize', updateFooterPosition);
+        window.visualViewport.addEventListener('scroll', updateFooterPosition);
+
+        return () => {
+            window.visualViewport.removeEventListener('resize', updateFooterPosition);
+            window.visualViewport.removeEventListener('scroll', updateFooterPosition);
+        };
+    }, []);
 
     // Load traits data
     useEffect(() => {
