@@ -350,11 +350,6 @@ function CollectionPage() {
                 </div>
             </header>
 
-            {/* Mobile Search Bar - fixed at top on mobile, outside content */}
-            <div className="collection-page__mobile-search">
-                <TerminalSearch onSearch={handleTerminalSearch} onClear={handleSearchClear} />
-            </div>
-
             {/* Main Content */}
             <div ref={contentRef} className={`collection-page__content ${sidebarOpen ? 'sidebar-open' : ''}`}>
                 <main className={`collection-page__grid ${sidebarOpen ? 'sidebar-open' : ''}`}>
