@@ -382,7 +382,7 @@ function CollectionPage() {
                         left: 0,
                         right: 0,
                         height: '50vh',
-                        background: 'var(--bg-page)',
+                        background: 'var(--bg-elevated)',
                         zIndex: 49,
                         pointerEvents: 'none'
                     }}
