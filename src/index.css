@@ -4,6 +4,14 @@
   box-sizing: border-box;
 }
 
+/* Mobile keyboard support */
+html,
+body {
+  min-height: 100vh;
+  min-height: 100dvh;
+  /* Dynamic viewport - adjusts when mobile keyboard opens */
+}
+
 :root {
   /* ========== COLOR VARIABLES (DARK MODE DEFAULT) ========== */
   /* Palette: #0F2622 #16352F #225045 #8BB69A #DBF0DD */
