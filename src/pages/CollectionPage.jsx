@@ -70,36 +70,42 @@ function CollectionPage() {
     // }, []);
 
     useEffect(() => {
-        if (!window.visualViewport || !footerRef.current) return;
+        if (!window.visualViewport) return;
 
-        const footer = footerRef.current;
-
-        const updateFooterPosition = () => {
+        const updateSearchPosition = () => {
             const vv = window.visualViewport;
             const keyboardHeight = window.innerHeight - vv.height;
             const isKeyboard = keyboardHeight > 100;
 
             setKeyboardVisible(isKeyboard);
 
-            if (isKeyboard) {
-                // Stick footer to visual viewport bottom
-                const footerHeight = footer.offsetHeight || 60;
-                footer.style.position = 'fixed';
-                footer.style.top = `${vv.offsetTop + vv.height - footerHeight}px`;
-                footer.style.bottom = 'auto';
-            } else {
-                // Let CSS handle safe-area again
-                footer.style.top = 'auto';
-                footer.style.bottom = '';
+            // Position search popup above keyboard when visible
+            const searchPopup = document.querySelector('.collection-page__search-popup');
+            if (searchPopup && isKeyboard) {
+                const searchHeight = searchPopup.offsetHeight || 50;
+                searchPopup.style.position = 'fixed';
+                searchPopup.style.top = `${vv.offsetTop + vv.height - searchHeight}px`;
+                searchPopup.style.bottom = 'auto';
+                searchPopup.style.left = '0';
+                searchPopup.style.right = '0';
+                searchPopup.style.zIndex = '100';
+            } else if (searchPopup) {
+                // Reset to normal positioning (above footer)
+                searchPopup.style.position = '';
+                searchPopup.style.top = '';
+                searchPopup.style.bottom = '';
+                searchPopup.style.left = '';
+                searchPopup.style.right = '';
+                searchPopup.style.zIndex = '';
             }
         };
 
-        window.visualViewport.addEventListener('resize', updateFooterPosition);
-        window.visualViewport.addEventListener('scroll', updateFooterPosition);
+        window.visualViewport.addEventListener('resize', updateSearchPosition);
+        window.visualViewport.addEventListener('scroll', updateSearchPosition);
 
         return () => {
-            window.visualViewport.removeEventListener('resize', updateFooterPosition);
-            window.visualViewport.removeEventListener('scroll', updateFooterPosition);
+            window.visualViewport.removeEventListener('resize', updateSearchPosition);
+            window.visualViewport.removeEventListener('scroll', updateSearchPosition);
         };
     }, []);
 
