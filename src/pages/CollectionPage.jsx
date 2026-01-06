@@ -81,6 +81,9 @@ function CollectionPage() {
 
             // Position search popup above keyboard when visible
             const searchPopup = document.querySelector('.collection-page__search-popup');
+            const terminalSearch = searchPopup?.querySelector('.terminal-search');
+            const outputEl = searchPopup?.querySelector('.terminal-search__output');
+
             if (searchPopup && isKeyboard) {
                 const searchHeight = searchPopup.offsetHeight || 50;
                 searchPopup.style.position = 'fixed';
@@ -92,7 +95,16 @@ function CollectionPage() {
                 searchPopup.style.borderBottom = 'none';
                 searchPopup.style.background = 'var(--bg-elevated)';
                 searchPopup.style.margin = '0';
-                searchPopup.style.padding = '0 24px';
+                searchPopup.style.padding = '0 12px';
+
+                // Also reduce inner terminal search padding
+                if (terminalSearch) {
+                    terminalSearch.style.padding = '8px 12px';
+                    terminalSearch.style.margin = '0';
+                }
+                if (outputEl) {
+                    outputEl.style.marginTop = '2px';
+                }
             } else if (searchPopup) {
                 // Reset to normal positioning (above footer)
                 searchPopup.style.position = '';
@@ -105,6 +117,14 @@ function CollectionPage() {
                 searchPopup.style.background = '';
                 searchPopup.style.margin = '';
                 searchPopup.style.padding = '';
+
+                if (terminalSearch) {
+                    terminalSearch.style.padding = '';
+                    terminalSearch.style.margin = '';
+                }
+                if (outputEl) {
+                    outputEl.style.marginTop = '';
+                }
             }
         };
 
