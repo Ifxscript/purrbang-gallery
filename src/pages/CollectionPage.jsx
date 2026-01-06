@@ -82,22 +82,12 @@ function CollectionPage() {
             setKeyboardVisible(isKeyboard);
 
             if (isKeyboard) {
-                // Lock body to prevent scrolling (flares.btc.art approach)
-                document.body.style.position = 'fixed';
-                document.body.style.overflow = 'hidden';
-                document.body.style.width = '100%';
-
                 // Stick footer to visual viewport bottom
                 const footerHeight = footer.offsetHeight || 60;
                 footer.style.position = 'fixed';
                 footer.style.top = `${vv.offsetTop + vv.height - footerHeight}px`;
                 footer.style.bottom = 'auto';
             } else {
-                // Unlock body
-                document.body.style.position = '';
-                document.body.style.overflow = '';
-                document.body.style.width = '';
-
                 // Let CSS handle safe-area again
                 footer.style.top = 'auto';
                 footer.style.bottom = '';
