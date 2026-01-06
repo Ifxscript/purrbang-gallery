@@ -1,5 +1,7 @@
 .collection-page {
     min-height: 100vh;
+    min-height: -webkit-fill-available;
+    /* iOS Safari safe area */
     min-height: 100dvh;
     /* Dynamic viewport height - adjusts for mobile keyboard */
     background: var(--bg-page);

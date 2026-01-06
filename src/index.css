@@ -8,6 +8,8 @@
 html,
 body {
   min-height: 100vh;
+  min-height: -webkit-fill-available;
+  /* iOS Safari safe area */
   min-height: 100dvh;
   /* Dynamic viewport - adjusts when mobile keyboard opens */
 }
