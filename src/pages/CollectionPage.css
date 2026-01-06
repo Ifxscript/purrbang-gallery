@@ -100,7 +100,7 @@
     padding: 2vw;
 }
 
-/* Footer - Fixed on desktop, part of flow on mobile */
+/* Footer - Fixed on all screens */
 .collection-page__footer {
     position: fixed;
     bottom: 0;
@@ -113,23 +113,16 @@
     padding-bottom: env(safe-area-inset-bottom, 0);
 }
 
-/* Mobile: Footer in flow, not fixed */
+/* Mobile adjustments */
 @media (max-width: 768px) {
     .collection-page {
-        height: -webkit-fill-available;
-        overflow-y: auto;
-        -webkit-overflow-scrolling: touch;
-    }
-
-    .collection-page__footer {
-        position: sticky;
-        bottom: 0;
-        flex-shrink: 0;
+        height: 100%;
+        min-height: -webkit-fill-available;
     }
 
     .collection-page__content {
-        padding-bottom: 0;
-        /* Footer is in flow now, no extra padding needed */
+        padding-bottom: 80px;
+        /* Extra space for footer + safe area */
     }
 }
 
