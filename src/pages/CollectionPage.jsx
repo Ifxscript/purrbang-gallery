@@ -33,6 +33,7 @@ function CollectionPage() {
     // Mobile keyboard detection
     const [keyboardVisible, setKeyboardVisible] = useState(false);
     const footerRef = useRef(null);
+    const contentRef = useRef(null);
 
     // Handle mobile keyboard showing/hiding using visualViewport
     // useEffect(() => {
@@ -73,6 +74,7 @@ function CollectionPage() {
         if (!window.visualViewport || !footerRef.current) return;
 
         const footer = footerRef.current;
+        const content = contentRef.current;
 
         const updateFooterPosition = () => {
             const vv = window.visualViewport;
@@ -87,10 +89,20 @@ function CollectionPage() {
                 footer.style.position = 'fixed';
                 footer.style.top = `${vv.offsetTop + vv.height - footerHeight}px`;
                 footer.style.bottom = 'auto';
+
+                // Adjust content padding so it ends at footer
+                if (content) {
+                    content.style.paddingBottom = `${keyboardHeight + footerHeight}px`;
+                }
             } else {
                 // Let CSS handle safe-area again
                 footer.style.top = 'auto';
                 footer.style.bottom = '';
+
+                // Reset content padding
+                if (content) {
+                    content.style.paddingBottom = '';
+                }
             }
         };
 
@@ -339,7 +351,7 @@ function CollectionPage() {
             </header>
 
             {/* Main Content */}
-            <div className={`collection-page__content ${sidebarOpen ? 'sidebar-open' : ''}`}>
+            <div ref={contentRef} className={`collection-page__content ${sidebarOpen ? 'sidebar-open' : ''}`}>
                 <main className={`collection-page__grid ${sidebarOpen ? 'sidebar-open' : ''}`}>
                     {displayedCats.map((cat, index) => {
                         const originalIndex = allCats.findIndex(c => c.inscriptionId === cat.inscriptionId);

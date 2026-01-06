@@ -1,18 +1,24 @@
 .collection-page {
-    min-height: 100vh;
-    min-height: -webkit-fill-available;
-    /* iOS Safari safe area */
-    min-height: 100dvh;
-    /* Dynamic viewport height - adjusts for mobile keyboard */
+    height: 100vh;
+    height: 100dvh;
+    height: -webkit-fill-available;
     background: var(--bg-page);
     display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    /* No body scroll */
 }
 
-/* Main Content - scrollable with fixed header/footer spacing */
+/* Main Content - scrolls within container */
 .collection-page__content {
     flex: 1;
     padding-top: 100px;
     padding-bottom: 60px;
+    overflow-y: auto;
+    /* Scroll happens inside here */
+    overflow-x: hidden;
+    -webkit-overflow-scrolling: touch;
+    /* Smooth scroll on iOS */
 }
 
 .collection-page__content.sidebar-open {
