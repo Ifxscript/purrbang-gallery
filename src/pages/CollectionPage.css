@@ -102,7 +102,6 @@
 /* Fixed Footer */
 .collection-page__footer {
     position: fixed;
-    bottom: 0;
     bottom: env(safe-area-inset-bottom, 0);
     /* iOS safe area */
     left: 0;
