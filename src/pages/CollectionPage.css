@@ -418,9 +418,18 @@
         padding: 10px 16px;
         background: var(--bg-elevated);
         border-bottom: 1px solid var(--border-default);
-        position: sticky;
-        top: 0;
-        z-index: 10;
+        position: fixed;
+        top: 75px;
+        /* Below the header */
+        left: 0;
+        right: 0;
+        z-index: 40;
+    }
+
+    /* Adjust content padding to account for fixed mobile search */
+    .collection-page__content {
+        padding-top: 140px;
+        /* header (100px) + search bar (~40px) */
     }
 
     /* Hide footer search popup on mobile */
