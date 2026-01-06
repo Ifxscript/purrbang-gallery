@@ -403,3 +403,33 @@
     outline: none;
     box-shadow: none;
 }
+
+/* ===== MOBILE SEARCH BAR ===== */
+/* Hidden on desktop, visible on mobile */
+.collection-page__mobile-search {
+    display: none;
+}
+
+@media (max-width: 768px) {
+
+    /* Show mobile search bar at top */
+    .collection-page__mobile-search {
+        display: block;
+        padding: 10px 16px;
+        background: var(--bg-elevated);
+        border-bottom: 1px solid var(--border-default);
+        position: sticky;
+        top: 0;
+        z-index: 10;
+    }
+
+    /* Hide footer search popup on mobile */
+    .collection-page__search-popup {
+        display: none !important;
+    }
+
+    /* Hide search toggle button in footer on mobile */
+    .collection-page__search-toggle {
+        display: none;
+    }
+}
