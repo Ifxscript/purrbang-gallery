@@ -81,9 +81,6 @@ function CollectionPage() {
 
             // Position search popup above keyboard when visible
             const searchPopup = document.querySelector('.collection-page__search-popup');
-            const terminalSearch = searchPopup?.querySelector('.terminal-search');
-            const outputEl = searchPopup?.querySelector('.terminal-search__output');
-
             if (searchPopup && isKeyboard) {
                 const searchHeight = searchPopup.offsetHeight || 50;
                 searchPopup.style.position = 'fixed';
@@ -92,21 +89,6 @@ function CollectionPage() {
                 searchPopup.style.left = '0';
                 searchPopup.style.right = '0';
                 searchPopup.style.zIndex = '100';
-                searchPopup.style.borderBottom = 'none';
-                searchPopup.style.background = 'var(--bg-elevated)';
-                searchPopup.style.margin = '0';
-                searchPopup.style.padding = '0';
-
-                // Remove all margins and padding from inner elements
-                if (terminalSearch) {
-                    terminalSearch.style.padding = '10px 12px';
-                    terminalSearch.style.margin = '0';
-                    terminalSearch.style.borderRadius = '0';
-                    terminalSearch.style.border = 'none';
-                }
-                if (outputEl) {
-                    outputEl.style.marginTop = '0';
-                }
             } else if (searchPopup) {
                 // Reset to normal positioning (above footer)
                 searchPopup.style.position = '';
@@ -115,20 +97,6 @@ function CollectionPage() {
                 searchPopup.style.left = '';
                 searchPopup.style.right = '';
                 searchPopup.style.zIndex = '';
-                searchPopup.style.borderBottom = '';
-                searchPopup.style.background = '';
-                searchPopup.style.margin = '';
-                searchPopup.style.padding = '';
-
-                if (terminalSearch) {
-                    terminalSearch.style.padding = '';
-                    terminalSearch.style.margin = '';
-                    terminalSearch.style.borderRadius = '';
-                    terminalSearch.style.border = '';
-                }
-                if (outputEl) {
-                    outputEl.style.marginTop = '';
-                }
             }
         };
 
@@ -378,15 +346,6 @@ function CollectionPage() {
 
             {/* Main Content */}
             <div className={`collection-page__content ${sidebarOpen ? 'sidebar-open' : ''}`}>
-                {/* Back button when viewing search result */}
-                {searchResult && (
-                    <button
-                        className="collection-page__back-btn"
-                        onClick={() => setSearchResult(null)}
-                    >
-                        ← Back to Gallery
-                    </button>
-                )}
                 <main className={`collection-page__grid ${sidebarOpen ? 'sidebar-open' : ''}`}>
                     {displayedCats.map((cat, index) => {
                         const originalIndex = allCats.findIndex(c => c.inscriptionId === cat.inscriptionId);
@@ -418,18 +377,17 @@ function CollectionPage() {
                 theme={theme}
             />
 
-            {/* Search popup - independent of footer, positioned above when keyboard opens */}
-            {searchOpen && (
-                <div className={`collection-page__search-popup ${sidebarOpen ? 'sidebar-open' : ''}`}>
-                    <TerminalSearch onSearch={handleTerminalSearch} onClear={handleSearchClear} />
-                </div>
-            )}
-
             {/* Fixed Footer */}
             <footer
                 ref={footerRef}
                 className={`collection-page__footer ${sidebarOpen ? 'sidebar-open' : ''}`}
             >
+                {/* Search popup - appears above footer when open */}
+                {searchOpen && (
+                    <div className={`collection-page__search-popup ${sidebarOpen ? 'sidebar-open' : ''}`}>
+                        <TerminalSearch onSearch={handleTerminalSearch} onClear={handleSearchClear} />
+                    </div>
+                )}
 
                 <div className="collection-page__footer-content">
                     <div className="collection-page__btc-price">
