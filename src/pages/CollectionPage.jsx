@@ -5,6 +5,17 @@ import FilterSidebar from '../components/FilterSidebar'
 import TerminalSearch from '../components/TerminalSearch'
 import './CollectionPage.css'
 
+const HeaderLogo = () => (
+    <svg viewBox="-30 -30 60 60" className="collection-page__logo">
+        <polygon points="25,-12.5 0,0 0,25 25,12.5" fill="currentColor" transform="translate(1, 0.5)" />
+        <polygon points="-25,-12.5 0,0 0,25 -25,12.5" fill="currentColor" transform="translate(-1, 0.5)" />
+        <g transform="translate(0, -1)">
+            <polygon points="-25,-12.5 0,0 12.5,-6.25 -12.5,-18.75" fill="currentColor" />
+            <polygon points="0,-25 25,-12.5 14.5,-7.25 -10.5,-19.5" fill="currentColor" />
+        </g>
+    </svg>
+)
+
 function CollectionPage() {
     const [allCats, setAllCats] = useState([]);
     const [modalOpen, setModalOpen] = useState(false);
