@@ -54,11 +54,33 @@ function App() {
     return () => clearInterval(interval);
   }, [page]);
 
+  // Sync page state with URL hash
+  useEffect(() => {
+    const handleHashChange = () => {
+      const hash = window.location.hash;
+      if (hash === '#/collection') {
+        setPage('collection');
+      } else if (hash === '#/loading') {
+        setPage('loading');
+      } else {
+        setPage('landing');
+      }
+    };
+
+    window.addEventListener('hashchange', handleHashChange);
+    // Initial check
+    handleHashChange();
+
+    return () => window.removeEventListener('hashchange', handleHashChange);
+  }, []);
+
   const handleEnter = useCallback(() => {
+    window.location.hash = '#/loading';
     setPage('loading');
   }, []);
 
   const handleLoadingComplete = useCallback(() => {
+    window.location.hash = '#/collection';
     setPage('collection');
   }, []);
 

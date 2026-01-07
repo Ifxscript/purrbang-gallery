@@ -347,7 +347,12 @@ function CollectionPage() {
                     <div className="collection-page__header-actions">
                         <button
                             className={`collection-page__search-toggle ${searchOpen ? 'active' : ''}`}
-                            onClick={() => setSearchOpen(!searchOpen)}
+                            onClick={() => {
+                                if (searchOpen) {
+                                    handleSearchClear();
+                                }
+                                setSearchOpen(!searchOpen);
+                            }}
                         >
                             <span className="collection-page__search-toggle-icon">&gt;</span>
                         </button>
@@ -358,6 +363,14 @@ function CollectionPage() {
                 {searchOpen && (
                     <div className="collection-page__search-container">
                         <TerminalSearch onSearch={handleTerminalSearch} onClear={handleSearchClear} />
+                        {searchResult && (
+                            <button
+                                className="collection-page__search-back-btn"
+                                onClick={handleSearchClear}
+                            >
+                                ← Back to Gallery
+                            </button>
+                        )}
                     </div>
                 )}
             </header>
