@@ -95,7 +95,8 @@ function CollectionPage() {
                     content.style.paddingBottom = `${keyboardHeight + footerHeight}px`;
                 }
             } else {
-                // Let CSS handle safe-area again
+                // Show footer and let CSS handle safe-area
+                footer.style.display = 'block';
                 footer.style.top = 'auto';
                 footer.style.bottom = '';
 
