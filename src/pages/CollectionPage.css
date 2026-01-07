@@ -51,11 +51,16 @@
 }
 
 .collection-page__header-center {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
     text-align: center;
 }
 
-.collection-page__header-spacer {
-    width: 36px;
+.collection-page__header-actions {
+    display: flex;
+    align-items: center;
+    gap: 12px;
 }
 
 .collection-page__filter-btn {
@@ -95,6 +100,26 @@
     font-size: 12px;
     color: var(--text-tertiary);
     margin: 4px 0 0;
+}
+
+/* Header Search Container */
+.collection-page__search-container {
+    margin-top: 16px;
+    padding-top: 16px;
+    border-top: 1px solid var(--border-default);
+    animation: slideDown 0.3s ease-out;
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 
@@ -143,43 +168,33 @@
     border: 1px solid var(--interactive-border);
     border-radius: 4px;
     color: var(--text-primary);
-    font-family: 'Courier New', Courier, monospace;
-    font-size: 18px;
-    font-weight: bold;
-    cursor: pointer;
-    transition: all 0.2s;
     display: flex;
     align-items: center;
     justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s;
+    outline: none;
 }
 
 .collection-page__search-toggle:hover,
 .collection-page__search-toggle.active {
     background: var(--interactive-bg-hover);
-    border-color: var(--interactive-border-hover);
+    border-color: var(--accent-primary, #BF923F);
+    color: var(--accent-primary, #BF923F);
 }
 
 .collection-page__search-toggle-icon {
     display: inline-block;
     transition: transform 0.2s ease;
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 18px;
+    font-weight: bold;
 }
 
 .collection-page__search-toggle.active .collection-page__search-toggle-icon {
     transform: rotate(-90deg);
 }
 
-.collection-page__search-popup {
-    padding: 0px 24px;
-    border-bottom: 1px solid var(--border-default);
-    transition: margin-left 0.1s ease;
-    /* margin: 0; */
-
-}
-
-.collection-page__search-popup.sidebar-open {
-    margin-left: 20%;
-    /* padding-left: 0px; */
-}
 
 /* .collection-page__search-popup .terminal-search {
     max-width: 100%;

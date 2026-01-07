@@ -346,8 +346,22 @@ function CollectionPage() {
                         <h1 className="collection-page__title">PurrBang</h1>
                         <p className="collection-page__subtitle">{filteredCats.length} items</p>
                     </div>
-                    <div className="collection-page__header-spacer" />
+                    <div className="collection-page__header-actions">
+                        <button
+                            className={`collection-page__search-toggle ${searchOpen ? 'active' : ''}`}
+                            onClick={() => setSearchOpen(!searchOpen)}
+                        >
+                            <span className="collection-page__search-toggle-icon">&gt;</span>
+                        </button>
+                    </div>
                 </div>
+
+                {/* Search overlay - appears below header row when open */}
+                {searchOpen && (
+                    <div className="collection-page__search-container">
+                        <TerminalSearch onSearch={handleTerminalSearch} onClear={handleSearchClear} />
+                    </div>
+                )}
             </header>
 
             {/* Main Content */}
@@ -388,13 +402,6 @@ function CollectionPage() {
                 ref={footerRef}
                 className={`collection-page__footer ${sidebarOpen ? 'sidebar-open' : ''}`}
             >
-                {/* Search popup - appears above footer when open */}
-                {searchOpen && (
-                    <div className={`collection-page__search-popup ${sidebarOpen ? 'sidebar-open' : ''}`}>
-                        <TerminalSearch onSearch={handleTerminalSearch} onClear={handleSearchClear} />
-                    </div>
-                )}
-
                 <div className="collection-page__footer-content">
                     <div className="collection-page__btc-price">
                         <span className="collection-page__btc-icon">₿</span>
@@ -407,12 +414,6 @@ function CollectionPage() {
                     </div>
 
                     <div className="collection-page__footer-actions">
-                        <button
-                            className={`collection-page__search-toggle ${searchOpen ? 'active' : ''}`}
-                            onClick={() => setSearchOpen(!searchOpen)}
-                        >
-                            <span className="collection-page__search-toggle-icon">&gt;</span>
-                        </button>
                         <button
                             className="collection-page__theme-toggle"
                             onClick={() => {
