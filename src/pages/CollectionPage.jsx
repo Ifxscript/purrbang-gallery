@@ -341,7 +341,9 @@ function CollectionPage() {
                         ☰
                     </button>
                     <div className="collection-page__header-center">
-                        <h1 className="collection-page__title">PurrBang</h1>
+                        <h1 className="collection-page__title">
+                            Purrb<HeaderLogo />ng
+                        </h1>
                         <p className="collection-page__subtitle">{filteredCats.length} items</p>
                     </div>
                     <div className="collection-page__header-actions">

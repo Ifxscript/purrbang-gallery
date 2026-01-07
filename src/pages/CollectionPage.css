@@ -94,6 +94,18 @@
     margin: 0;
     text-transform: uppercase;
     letter-spacing: 2px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 2px;
+}
+
+.collection-page__logo {
+    height: 18px;
+    width: auto;
+    display: inline-block;
+    vertical-align: middle;
+    /* margin-top: -2px; */
 }
 
 .collection-page__subtitle {
