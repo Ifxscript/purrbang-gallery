@@ -84,15 +84,12 @@ function CollectionPage() {
             setKeyboardVisible(isKeyboard);
 
             if (isKeyboard) {
-                // Stick footer to visual viewport bottom
-                const footerHeight = footer.offsetHeight || 60;
-                footer.style.position = 'fixed';
-                footer.style.top = `${vv.offsetTop + vv.height - footerHeight}px`;
-                footer.style.bottom = 'auto';
+                // Hide footer when keyboard is open
+                footer.style.display = 'none';
 
-                // Adjust content padding so it ends at footer
+                // Adjust content padding for keyboard
                 if (content) {
-                    content.style.paddingBottom = `${keyboardHeight + footerHeight}px`;
+                    content.style.paddingBottom = `${keyboardHeight}px`;
                 }
             } else {
                 // Show footer and let CSS handle safe-area
