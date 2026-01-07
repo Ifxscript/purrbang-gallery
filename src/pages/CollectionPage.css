@@ -122,26 +122,6 @@
     animation: slideDown 0.3s ease-out;
 }
 
-.collection-page__search-back-btn {
-    margin-top: 12px;
-    background: transparent;
-    border: none;
-    color: var(--text-tertiary);
-    font-family: 'Courier New', Courier, monospace;
-    font-size: 14px;
-    font-weight: bold;
-    cursor: pointer;
-    transition: all 0.2s;
-    padding: 4px 0;
-    text-align: left;
-    width: fit-content;
-}
-
-.collection-page__search-back-btn:hover {
-    color: var(--accent-primary, #BF923F);
-    transform: translateX(-4px);
-}
-
 
 @keyframes slideDown {
     from {
