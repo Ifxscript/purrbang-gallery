@@ -560,8 +560,6 @@
     max-height: none;
     flex-shrink: 0;
     margin-left: 0;
-    pointer-events: none;
-    /* Crucial: ensures touch gestures scroll the modal instead of being caught by iframe */
 }
 
 .spark-modal.mobile-portrait .spark-modal__image {
