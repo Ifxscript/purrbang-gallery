@@ -108,18 +108,14 @@ function TraitsPage({ onNavigateToCollection }) {
         return sortedGroups;
     }, [allCats]);
 
-    const handleBack = () => {
-        onNavigateToCollection();
-    };
-
     return (
         <div className={`traits-page ${theme}`}>
             <header className="traits-page__header">
                 <div className="traits-page__header-left">
-                    <button className="traits-page__back-btn" onClick={handleBack}>
+                    <a href="#/collection" className="traits-page__back-btn">
                         <ChevronLeft size={20} />
                         <span>Gallery</span>
-                    </button>
+                    </a>
                     <div className="traits-page__brand">
                         <HeaderLogo />
                         <span className="traits-page__title">Traits Library</span>

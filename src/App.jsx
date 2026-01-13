@@ -55,22 +55,42 @@ function App() {
     return () => clearInterval(interval);
   }, [page]);
 
-  // No longer using hash-based routing as requested for cleaner URLs
+  // Sync page state with URL hash
+  useEffect(() => {
+    const handleHashChange = () => {
+      const hash = window.location.hash;
+      if (hash === '#/collection') {
+        setPage('collection');
+      } else if (hash === '#/loading') {
+        setPage('loading');
+      } else if (hash === '#/traits') {
+        setPage('traits');
+      } else {
+        setPage('landing');
+      }
+    };
+
+    window.addEventListener('hashchange', handleHashChange);
+    // Initial check
+    handleHashChange();
+
+    return () => window.removeEventListener('hashchange', handleHashChange);
+  }, []);
 
   const handleEnter = useCallback(() => {
-    setPage('loading');
+    window.location.hash = '#/loading';
   }, []);
 
   const handleLoadingComplete = useCallback(() => {
-    setPage('collection');
+    window.location.hash = '#/collection';
   }, []);
 
   const handleNavigateToTraits = useCallback(() => {
-    setPage('traits');
+    window.location.hash = '#/traits';
   }, []);
 
   const handleNavigateToCollection = useCallback(() => {
-    setPage('collection');
+    window.location.hash = '#/collection';
   }, []);
 
   if (page === 'collection') {

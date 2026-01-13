@@ -354,13 +354,13 @@ function CollectionPage({ onNavigateToTraits }) {
                         >
                             <span className="collection-page__info-toggle-icon">&lt;</span>
                         </button>
-                        <button
-                            onClick={onNavigateToTraits}
+                        <a
+                            href="#/traits"
                             className="collection-page__theme-toggle"
                             title="Traits Library"
                         >
                             <Tags size={20} />
-                        </button>
+                        </a>
                         <button
                             className="collection-page__theme-toggle"
                             title="Toggle Theme"
