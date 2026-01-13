@@ -43,89 +43,6 @@ function CollectionPage({ onNavigateToTraits }) {
     const [searchOpen, setSearchOpen] = useState(false);
     const [aboutOpen, setAboutOpen] = useState(false);
 
-    // Mobile keyboard detection
-    const [keyboardVisible, setKeyboardVisible] = useState(false);
-    const footerRef = useRef(null);
-    const contentRef = useRef(null);
-
-    // Handle mobile keyboard showing/hiding using visualViewport
-    // useEffect(() => {
-    //     if (!window.visualViewport) return;
-
-    //     const updateFooterPosition = () => {
-    //         const viewport = window.visualViewport;
-    //         const keyboardHeight = window.innerHeight - viewport.height;
-    //         const isKeyboard = keyboardHeight > 100;
-
-    //         setKeyboardVisible(isKeyboard);
-
-    //         if (footerRef.current && isKeyboard) {
-    //             // Position footer at exact bottom of visual viewport
-    //             // Use top positioning based on visual viewport
-    //             const footerHeight = footerRef.current.offsetHeight || 60;
-    //             footerRef.current.style.position = 'fixed';
-    //             footerRef.current.style.bottom = 'auto';
-    //             footerRef.current.style.top = `${viewport.offsetTop + viewport.height - footerHeight}px`;
-    //         } else if (footerRef.current) {
-    //             // Reset to normal fixed bottom
-    //             footerRef.current.style.position = 'fixed';
-    //             footerRef.current.style.bottom = '0';
-    //             footerRef.current.style.top = 'auto';
-    //         }
-    //     };
-
-    //     window.visualViewport.addEventListener('resize', updateFooterPosition);
-    //     window.visualViewport.addEventListener('scroll', updateFooterPosition);
-
-    //     return () => {
-    //         window.visualViewport.removeEventListener('resize', updateFooterPosition);
-    //         window.visualViewport.removeEventListener('scroll', updateFooterPosition);
-    //     };
-    // }, []);
-
-    useEffect(() => {
-        if (!window.visualViewport || !footerRef.current) return;
-
-        const footer = footerRef.current;
-        const content = contentRef.current;
-
-        const updateFooterPosition = () => {
-            const vv = window.visualViewport;
-            const keyboardHeight = window.innerHeight - vv.height;
-            const isKeyboard = keyboardHeight > 100;
-
-            setKeyboardVisible(isKeyboard);
-
-            if (isKeyboard) {
-                // Hide footer when keyboard is open
-                footer.style.display = 'none';
-
-                // Adjust content padding for keyboard
-                if (content) {
-                    content.style.paddingBottom = `${keyboardHeight}px`;
-                }
-            } else {
-                // Show footer and let CSS handle safe-area
-                footer.style.display = 'block';
-                footer.style.top = 'auto';
-                footer.style.bottom = '0px';
-
-                // Reset content padding
-                if (content) {
-                    content.style.paddingBottom = '';
-                }
-            }
-        };
-
-        window.visualViewport.addEventListener('resize', updateFooterPosition);
-        window.visualViewport.addEventListener('scroll', updateFooterPosition);
-
-        return () => {
-            window.visualViewport.removeEventListener('resize', updateFooterPosition);
-            window.visualViewport.removeEventListener('scroll', updateFooterPosition);
-        };
-    }, []);
-
     // Load traits data
     useEffect(() => {
         fetch('/all-traits.json')
@@ -379,7 +296,7 @@ function CollectionPage({ onNavigateToTraits }) {
             </header>
 
             {/* Main Content */}
-            <div ref={contentRef} className={`collection-page__content ${sidebarOpen ? 'sidebar-open' : ''}`}>
+            <div className={`collection-page__content ${sidebarOpen ? 'sidebar-open' : ''}`}>
                 <main className={`collection-page__grid ${sidebarOpen ? 'sidebar-open' : ''}`}>
                     {displayedCats.map((cat, index) => {
                         const originalIndex = allCats.findIndex(c => c.inscriptionId === cat.inscriptionId);
@@ -413,7 +330,6 @@ function CollectionPage({ onNavigateToTraits }) {
 
             {/* Fixed Footer */}
             <footer
-                ref={footerRef}
                 className={`collection-page__footer ${sidebarOpen ? 'sidebar-open' : ''}`}
             >
                 <div className="collection-page__footer-content">
