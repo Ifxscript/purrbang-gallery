@@ -1,4 +1,5 @@
 import { useState, useEffect, useMemo, useRef, useCallback } from 'react'
+import { Menu, Terminal, Sun, Moon, Tags, Info } from 'lucide-react'
 import SparkCard from '../components/SparkCard'
 import SparkModal from '../components/SparkModal'
 import FilterSidebar from '../components/FilterSidebar'
@@ -16,7 +17,7 @@ const HeaderLogo = () => (
     </svg>
 )
 
-function CollectionPage() {
+function CollectionPage({ onNavigateToTraits }) {
     const [allCats, setAllCats] = useState([]);
     const [modalOpen, setModalOpen] = useState(false);
     const [selectedIndex, setSelectedIndex] = useState(null);
@@ -40,6 +41,7 @@ function CollectionPage() {
     // Terminal search state - stores the found cat when searching
     const [searchResult, setSearchResult] = useState(null);
     const [searchOpen, setSearchOpen] = useState(false);
+    const [aboutOpen, setAboutOpen] = useState(false);
 
     // Mobile keyboard detection
     const [keyboardVisible, setKeyboardVisible] = useState(false);
@@ -106,7 +108,7 @@ function CollectionPage() {
                 // Show footer and let CSS handle safe-area
                 footer.style.display = 'block';
                 footer.style.top = 'auto';
-                footer.style.bottom = '';
+                footer.style.bottom = '0px';
 
                 // Reset content padding
                 if (content) {
@@ -349,7 +351,7 @@ function CollectionPage() {
                         className="collection-page__filter-btn"
                         onClick={() => setSidebarOpen(!sidebarOpen)}
                     >
-                        ☰
+                        <Menu size={20} />
                     </button>
                     <div className="collection-page__header-center">
                         <h1 className="collection-page__title">
@@ -362,6 +364,7 @@ function CollectionPage() {
                             className={`collection-page__search-toggle ${searchOpen ? 'active' : ''}`}
                             onClick={() => {
                                 setSearchOpen(!searchOpen);
+                                if (aboutOpen) setAboutOpen(false); // Close about if search is opened
                             }}
                         >
                             <span className="collection-page__search-toggle-icon">&gt;</span>
@@ -369,12 +372,10 @@ function CollectionPage() {
                     </div>
                 </div>
 
-                {/* Search overlay - appears below header row when open */}
-                {searchOpen && (
-                    <div className="collection-page__search-container">
-                        <TerminalSearch onSearch={handleTerminalSearch} onClear={handleSearchClear} />
-                    </div>
-                )}
+                {/* Search overlay - always mounted to preserve state, hidden via CSS */}
+                <div className={`collection-page__search-container ${!searchOpen ? 'is-hidden' : ''}`}>
+                    <TerminalSearch onSearch={handleTerminalSearch} onClear={handleSearchClear} />
+                </div>
             </header>
 
             {/* Main Content */}
@@ -428,31 +429,47 @@ function CollectionPage() {
 
                     <div className="collection-page__footer-actions">
                         <button
+                            className={`collection-page__info-toggle ${aboutOpen ? 'active' : ''}`}
+                            onClick={() => {
+                                setAboutOpen(!aboutOpen);
+                                if (searchOpen) setSearchOpen(false);
+                            }}
+                            title="About Collection"
+                        >
+                            <span className="collection-page__info-toggle-icon">&lt;</span>
+                        </button>
+                        <button
+                            onClick={onNavigateToTraits}
                             className="collection-page__theme-toggle"
+                            title="Traits Library"
+                        >
+                            <Tags size={20} />
+                        </button>
+                        <button
+                            className="collection-page__theme-toggle"
+                            title="Toggle Theme"
                             onClick={() => {
                                 const newTheme = theme === 'dark' ? 'light' : 'dark';
                                 setTheme(newTheme);
                                 localStorage.setItem('theme', newTheme);
                             }}
                         >
-                            {theme === 'dark' ? (
-                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                                    <circle cx="12" cy="12" r="5" />
-                                    <line x1="12" y1="1" x2="12" y2="3" />
-                                    <line x1="12" y1="21" x2="12" y2="23" />
-                                    <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" />
-                                    <line x1="18.36" y1="18.36" x2="19.78" y2="19.78" />
-                                    <line x1="1" y1="12" x2="3" y2="12" />
-                                    <line x1="21" y1="12" x2="23" y2="12" />
-                                    <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" />
-                                    <line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
-                                </svg>
-                            ) : (
-                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                                    <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
-                                </svg>
-                            )}
+                            {theme === 'dark' ? <Sun size={20} /> : <Moon size={20} />}
                         </button>
+                    </div>
+                </div>
+
+                {/* About Section overlay - moved to footer for slide-up effect */}
+                <div className={`collection-page__about-section ${!aboutOpen ? 'is-hidden' : ''}`}>
+                    <div className="collection-page__about-content">
+                        <h2 className="collection-page__about-title">About Purrbang</h2>
+                        <p className="collection-page__about-description">
+                            Purrbang is an generative art pfp collection on mother chain pushing limits of whats possible.
+                        </p>
+                        <div className="collection-page__about-links">
+                            <a href="https://magiceden.io/ordinals/marketplace/purrbang" target="_blank" rel="noopener noreferrer" className="collection-page__about-link">Marketplace</a>
+                            <a href="https://x.com/purrBangBTC" target="_blank" rel="noopener noreferrer" className="collection-page__about-link">Twitter / X</a>
+                        </div>
                     </div>
                 </div>
             </footer >

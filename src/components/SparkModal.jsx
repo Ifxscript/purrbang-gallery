@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { Copy, Check, ExternalLink, X, ChevronLeft, ChevronRight, ChevronDown, ArrowRight } from 'lucide-react';
 import './SparkModal.css';
 
 function SparkModal({ isOpen, onClose, data, allCats, currentIndex, onNavigate, theme }) {
@@ -8,11 +9,19 @@ function SparkModal({ isOpen, onClose, data, allCats, currentIndex, onNavigate, 
     const [iframeKey, setIframeKey] = useState(0);
 
     // Collapsible sections state
+    const [detailsOpen, setDetailsOpen] = useState(false);
     const [traitsOpen, setTraitsOpen] = useState(true);
     const [activityOpen, setActivityOpen] = useState(false);
 
-    // Mobile portrait detection
-    const [isMobilePortrait, setIsMobilePortrait] = useState(false);
+    // Copy feedback state
+    const [copiedField, setCopiedField] = useState(null);
+
+    // Mobile portrait detection - immediate check to prevent layout shift
+    const [isMobilePortrait, setIsMobilePortrait] = useState(() => {
+        const width = typeof window !== 'undefined' ? window.innerWidth : 1100;
+        const height = typeof window !== 'undefined' ? window.innerHeight : 0;
+        return width < 1100 && height > width;
+    });
 
     useEffect(() => {
         const checkMobilePortrait = () => {
@@ -21,7 +30,6 @@ function SparkModal({ isOpen, onClose, data, allCats, currentIndex, onNavigate, 
             setIsMobilePortrait(width < 1100 && height > width);
         };
 
-        checkMobilePortrait();
         window.addEventListener('resize', checkMobilePortrait);
         return () => window.removeEventListener('resize', checkMobilePortrait);
     }, []);
@@ -55,13 +63,57 @@ function SparkModal({ isOpen, onClose, data, allCats, currentIndex, onNavigate, 
 
     if (!isOpen || !data) return null;
 
-    const traitColors = {
-        outfit: 'rgba(255, 84, 0, 0.8)',
-        head: 'rgba(191, 146, 63, 0.8)',
-        eyes: 'rgba(90, 115, 2, 0.8)',
-        ears: 'rgba(39, 89, 80, 0.8)',
-        mouth: 'rgba(112, 101, 19, 0.8)',
-        pet: 'rgba(139, 92, 246, 0.8)'
+    // Trait inscription mapping for loading images
+    const traitsData = {
+        pet: [
+            { name: "pepe", inscriptionId: "0c468dc10886b2bdd9a07d64faa9d416a16913ae451b86e7a105eb22655b288ei0" },
+            { name: "Gizmo", inscriptionId: "d761251b9eb961a7d0e1e2b235fd40311867ac75804b2da1f0f672184ec64381i0" },
+            { name: "Puppet", inscriptionId: "954410fdd7ed60bf6cfdb88c729d4efbad3f55d7b7eda1dae05aec541eaadecei0" },
+            { name: "Weirdos", inscriptionId: "dc69638099fa86b68fc32b23a08e98c6cadf2532f3d67dc28494a9586a2d3a80i0" }
+        ],
+        ears: [
+            { name: "Ear1", inscriptionId: "c8d8dabdc82e0287121725027f3b0b4870f58854694c87920ab0e791510109f1i0" },
+            { name: "Ear2", inscriptionId: "7e93d485a67137f252db722ed157ca11bfe758ef5d0fb62d96ac808403a4a8d2i0" },
+            { name: "Ear3", inscriptionId: "ad682a9ffaa79d4fe10354b096deefa57b7bf629d91b8af647bf519ffa10e078i0" },
+            { name: "Ear4", inscriptionId: "fcfc44ce4713572b781ff1d23aca7774799ca8b6f1aaf54a3a1b2bc1547c7965i0" },
+            { name: "Ear5", inscriptionId: "0834a972aaec679b0fbd0a9b9857561e78952f0ef4b20fb1687b951c68dfaf46i0" }
+        ],
+        eyes: [
+            { name: "Eyes1", inscriptionId: "47b18c592399aaf87c3cc2e63034002853057fa4ac50c3c29d5b15812a816015i0" },
+            { name: "Eyes2", inscriptionId: "af4a33e5412662b7af85767662d73bb43df8374ff7da36d148443f7f0f464384i0" },
+            { name: "Eyes3", inscriptionId: "fd8ad3da0cc297f04d25fcc84ae6f49d1e7f662b2fbbefb059e0f22a2deab758i0" },
+            { name: "Eyes4", inscriptionId: "79eb8bf35c705bcae0bd093a74420a917e5c8f6174ec943b153aa5e8c40392d7i0" },
+            { name: "Eyes5", inscriptionId: "de1fa1adc444e0e31874f9271130fa85e0f458b1da1b4b7ddbc7b7c092583074i0" },
+            { name: "Eyesr", inscriptionId: "811262cfa5e536193cef7f6513048b41efbce022b49e620342fe3fa4067deb21i0" }
+        ],
+        head: [
+            { name: "Body1", inscriptionId: "a24035442498fad226c889d18adcfd2bcd7e3a18d0284f48ae70645a8fffae97i0" },
+            { name: "Body2", inscriptionId: "e9a34afd0c71608e09ad5c9fdba29d42670d1532d34dc98f898866adbdeeeed4i0" },
+            { name: "Body3", inscriptionId: "0c6d62a486c7f9fabb7d1f178d635c34d62f81b09278680a454c392db3d36a96i0" },
+            { name: "Body4", inscriptionId: "22d7acd678665ff0182788d6433884f6fa910a80d766c92a6770e2a9e00c4d0di0" }
+        ],
+        mouth: [
+            { name: "Mouth1", inscriptionId: "a784de5819e052709389590fa6c41fb679cb921364c5819967eef9ec26e3db9di0" },
+            { name: "Mouth2", inscriptionId: "6ff511ea33c8e3081ffcdc71706bce139d218b95abf9c0bf367e48f7e15456c1i0" },
+            { name: "Mouth3", inscriptionId: "11bb889a1dd6726c2d77daf7c0069c3aee8b63d4ec65c322351d100758e28553i0" },
+            { name: "Mouth4", inscriptionId: "d97f22b5addada477933f49aa36f3eb15ca67ae0e363212557a337fb1a1f6bf5i0" },
+            { name: "Mouth5", inscriptionId: "19ae2693fec97015ca7ea99e3f3b21c0e5bf422373c1355f5dd1525519638dfai0" }
+        ],
+        outfit: [
+            { name: "Greenshirt", inscriptionId: "2449cc4d078d80141a91997097d1e28738320fee90e49cf630805708fa482839i0" },
+            { name: "Hoodie", inscriptionId: "a8dd265c8ad9e0d63f08c50cae7a57b54a41e3f3723985d1f1ffd43a46972f25i0" },
+            { name: "Rockstar", inscriptionId: "ab6db5c7d5455fced3bf744aa13ae2d7a1ceab7533fa211fc4f6112e106fa99ai0" },
+            { name: "Suit", inscriptionId: "725a97374ab963f1ef6a6dbc0bdc000cc24ea934c1ec6e828a097132c364fbdei0" },
+            { name: "Vest", inscriptionId: "7f97b7406ca9015257d8371f7338a910a578002db1ea5fdb68990e2c371555bdi0" }
+        ]
+    };
+
+    // Get inscription ID for a trait value
+    const getTraitInscriptionId = (traitType, traitValue) => {
+        const traits = traitsData[traitType];
+        if (!traits) return null;
+        const trait = traits.find(t => t.name.toLowerCase() === traitValue.toLowerCase());
+        return trait ? trait.inscriptionId : null;
     };
 
     // Format timestamp to readable date
@@ -79,6 +131,39 @@ function SparkModal({ isOpen, onClose, data, allCats, currentIndex, onNavigate, 
     const shortenAddress = (addr) => {
         if (!addr) return 'Unknown';
         return `${addr.slice(0, 6)}...${addr.slice(-4)}`;
+    };
+
+    // Shorten ID for display (longer truncation)
+    const shortenId = (id) => {
+        if (!id) return 'Unknown';
+        return `${id.slice(0, 12)}...${id.slice(-6)}`;
+    };
+
+    // Format relative time (e.g., "1 day ago")
+    const formatRelativeTime = (timestamp) => {
+        if (!timestamp) return '';
+        const now = Date.now();
+        const date = new Date(timestamp * 1000);
+        const diffMs = now - date.getTime();
+        const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+
+        if (diffDays === 0) return 'today';
+        if (diffDays === 1) return '1 day ago';
+        if (diffDays < 30) return `${diffDays} days ago`;
+        if (diffDays < 365) {
+            const months = Math.floor(diffDays / 30);
+            return months === 1 ? '1 month ago' : `${months} months ago`;
+        }
+        const years = Math.floor(diffDays / 365);
+        return years === 1 ? '1 year ago' : `${years} years ago`;
+    };
+
+    // Copy to clipboard with feedback
+    const handleCopy = (value, fieldName) => {
+        navigator.clipboard.writeText(value).then(() => {
+            setCopiedField(fieldName);
+            setTimeout(() => setCopiedField(null), 1500);
+        });
     };
 
     // Get neighbor thumbnails (2 before, current, 2 after)
@@ -137,7 +222,7 @@ function SparkModal({ isOpen, onClose, data, allCats, currentIndex, onNavigate, 
                         onClick={onClose}
                         title="Close"
                     >
-                        ×
+                        <X size={18} />
                     </button>
                 </div>
 
@@ -150,7 +235,7 @@ function SparkModal({ isOpen, onClose, data, allCats, currentIndex, onNavigate, 
                             disabled={currentIndex <= 0}
                             title="Previous"
                         >
-                            ←
+                            <ChevronLeft size={20} />
                         </button>
 
                         <div className="spark-modal__thumbnails">
@@ -175,7 +260,7 @@ function SparkModal({ isOpen, onClose, data, allCats, currentIndex, onNavigate, 
                             disabled={currentIndex >= allCats?.length - 1}
                             title="Next"
                         >
-                            →
+                            <ChevronRight size={20} />
                         </button>
                     </div>
                 )}
@@ -201,7 +286,7 @@ function SparkModal({ isOpen, onClose, data, allCats, currentIndex, onNavigate, 
                             onClick={() => onNavigate(currentIndex - 1)}
                             disabled={currentIndex <= 0}
                         >
-                            ←
+                            <ChevronLeft size={20} />
                         </button>
 
                         <div className="spark-modal__thumbnails">
@@ -225,7 +310,7 @@ function SparkModal({ isOpen, onClose, data, allCats, currentIndex, onNavigate, 
                             onClick={() => onNavigate(currentIndex + 1)}
                             disabled={currentIndex >= allCats?.length - 1}
                         >
-                            →
+                            <ChevronRight size={20} />
                         </button>
                     </div>
                 )}
@@ -234,32 +319,131 @@ function SparkModal({ isOpen, onClose, data, allCats, currentIndex, onNavigate, 
                 <div className="spark-modal__info">
                     <span className="spark-modal__title">{data.title}</span>
 
-                    {/* Details Section - Always expanded */}
-                    <div className="spark-modal__section">
-                        <span className="spark-modal__section-title">Details</span>
-                        {loading ? (
-                            <span className="spark-modal__loading">Loading...</span>
-                        ) : inscriptionData ? (
-                            <div className="spark-modal__history">
-                                <div className="spark-modal__history-row">
-                                    <span className="spark-modal__history-label">Inscription #</span>
-                                    <span className="spark-modal__history-value">{inscriptionData.number?.toLocaleString()}</span>
-                                </div>
-                                <div className="spark-modal__history-row">
-                                    <span className="spark-modal__history-label">Created</span>
-                                    <span className="spark-modal__history-value">{formatDate(inscriptionData.timestamp)}</span>
-                                </div>
-                                <div className="spark-modal__history-row">
-                                    <span className="spark-modal__history-label">Block</span>
-                                    <span className="spark-modal__history-value">{inscriptionData.height?.toLocaleString()}</span>
-                                </div>
-                                <div className="spark-modal__history-row">
-                                    <span className="spark-modal__history-label">Owner</span>
-                                    <span className="spark-modal__history-value">{shortenAddress(inscriptionData.address)}</span>
-                                </div>
-                            </div>
-                        ) : (
-                            <span className="spark-modal__loading">Unable to load</span>
+                    {/* Details Section - Collapsible */}
+                    <div className="spark-modal__section spark-modal__section--collapsible">
+                        <button
+                            className={`spark-modal__section-header ${detailsOpen ? 'expanded' : ''}`}
+                            onClick={() => setDetailsOpen(!detailsOpen)}
+                        >
+                            <span className="spark-modal__section-title">Details</span>
+                            <span className="spark-modal__chevron">{detailsOpen ? <ChevronDown size={16} /> : <ChevronRight size={16} />}</span>
+                        </button>
+                        {detailsOpen && (
+                            <>
+                                {loading ? (
+                                    <span className="spark-modal__loading">Loading...</span>
+                                ) : inscriptionData ? (
+                                    <div className="spark-modal__details">
+                                        {/* Inscription Number - Copyable */}
+                                        <div className="spark-modal__detail-item">
+                                            <span className="spark-modal__detail-label">Inscription Number</span>
+                                            <div className="spark-modal__detail-value">
+                                                <span>{inscriptionData.number?.toLocaleString()}</span>
+                                                <button
+                                                    className={`spark-modal__copy-btn ${copiedField === 'number' ? 'copied' : ''}`}
+                                                    onClick={() => handleCopy(String(inscriptionData.number), 'number')}
+                                                    title="Copy"
+                                                >
+                                                    {copiedField === 'number' ? <Check size={14} /> : <Copy size={14} />}
+                                                </button>
+                                            </div>
+                                        </div>
+
+                                        {/* Inscription ID - Copyable */}
+                                        <div className="spark-modal__detail-item">
+                                            <span className="spark-modal__detail-label">Inscription ID</span>
+                                            <div className="spark-modal__detail-value">
+                                                <span>{shortenId(data.inscriptionId)}</span>
+                                                <button
+                                                    className={`spark-modal__copy-btn ${copiedField === 'id' ? 'copied' : ''}`}
+                                                    onClick={() => handleCopy(data.inscriptionId, 'id')}
+                                                    title="Copy"
+                                                >
+                                                    {copiedField === 'id' ? <Check size={14} /> : <Copy size={14} />}
+                                                </button>
+                                            </div>
+                                        </div>
+
+                                        {/* Owner - Copyable */}
+                                        <div className="spark-modal__detail-item">
+                                            <span className="spark-modal__detail-label">Owner</span>
+                                            <div className="spark-modal__detail-value">
+                                                <span>{shortenAddress(inscriptionData.address)}</span>
+                                                <button
+                                                    className={`spark-modal__copy-btn ${copiedField === 'owner' ? 'copied' : ''}`}
+                                                    onClick={() => handleCopy(inscriptionData.address, 'owner')}
+                                                    title="Copy"
+                                                >
+                                                    {copiedField === 'owner' ? <Check size={14} /> : <Copy size={14} />}
+                                                </button>
+                                            </div>
+                                        </div>
+
+                                        {/* Content Type - Not Copyable */}
+                                        <div className="spark-modal__detail-item">
+                                            <span className="spark-modal__detail-label">Content Type</span>
+                                            <div className="spark-modal__detail-value">
+                                                <span>{inscriptionData.content_type || (inscriptionData.delegate ? 'Delegate' : 'Unknown')}</span>
+                                            </div>
+                                        </div>
+
+                                        {/* Sat Number - Copyable */}
+                                        <div className="spark-modal__detail-item">
+                                            <span className="spark-modal__detail-label">Satoshi Number</span>
+                                            <div className="spark-modal__detail-value">
+                                                <span>{inscriptionData.sat?.toLocaleString()}</span>
+                                                <button
+                                                    className={`spark-modal__copy-btn ${copiedField === 'sat' ? 'copied' : ''}`}
+                                                    onClick={() => handleCopy(String(inscriptionData.sat), 'sat')}
+                                                    title="Copy"
+                                                >
+                                                    {copiedField === 'sat' ? <Check size={14} /> : <Copy size={14} />}
+                                                </button>
+                                            </div>
+                                        </div>
+
+                                        {/* Creation Block - Not Copyable */}
+                                        <div className="spark-modal__detail-item">
+                                            <span className="spark-modal__detail-label">Creation Block</span>
+                                            <div className="spark-modal__detail-value">
+                                                <span>{inscriptionData.height?.toLocaleString()}</span>
+                                            </div>
+                                        </div>
+
+                                        {/* Creation Date - Not Copyable */}
+                                        <div className="spark-modal__detail-item">
+                                            <span className="spark-modal__detail-label">Creation Date</span>
+                                            <div className="spark-modal__detail-value">
+                                                <span>
+                                                    {formatDate(inscriptionData.timestamp)}
+                                                    {inscriptionData.timestamp && (
+                                                        <span className="spark-modal__detail-secondary">
+                                                            {' '}({formatRelativeTime(inscriptionData.timestamp)})
+                                                        </span>
+                                                    )}
+                                                </span>
+                                            </div>
+                                        </div>
+
+                                        {/* Creation Transaction - Not Copyable, Clickable Link */}
+                                        <div className="spark-modal__detail-item">
+                                            <span className="spark-modal__detail-label">Creation Transaction</span>
+                                            <div className="spark-modal__detail-value">
+                                                <a
+                                                    href={`https://mempool.space/tx/${data.inscriptionId.split('i')[0]}`}
+                                                    target="_blank"
+                                                    rel="noopener noreferrer"
+                                                    className="spark-modal__detail-link"
+                                                >
+                                                    {shortenId(data.inscriptionId.split('i')[0])}
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                ) : (
+                                    <span className="spark-modal__loading">Unable to load</span>
+                                )}
+                            </>
                         )}
                     </div>
 
@@ -270,21 +454,26 @@ function SparkModal({ isOpen, onClose, data, allCats, currentIndex, onNavigate, 
                             onClick={() => setTraitsOpen(!traitsOpen)}
                         >
                             <span className="spark-modal__section-title">Traits</span>
-                            <span className="spark-modal__chevron">{traitsOpen ? '▼' : '▶'}</span>
+                            <span className="spark-modal__chevron">{traitsOpen ? <ChevronDown size={16} /> : <ChevronRight size={16} />}</span>
                         </button>
                         {traitsOpen && (
-                            <div className="spark-modal__traits">
-                                {Object.entries(data.traits).map(([trait, value]) => (
-                                    <div key={trait} className="spark-modal__trait-row">
-                                        <span className="spark-modal__trait-label">{trait}</span>
-                                        <span
-                                            className="spark-modal__trait-value"
-                                            style={{ backgroundColor: traitColors[trait] }}
+                            <div className="spark-modal__traits-grid">
+                                {Object.entries(data.traits).map(([traitType, traitValue]) => {
+                                    const inscriptionId = getTraitInscriptionId(traitType, traitValue);
+                                    return inscriptionId ? (
+                                        <div
+                                            key={traitType}
+                                            className="spark-modal__trait-card"
+                                            title={`${traitType}: ${traitValue}`}
                                         >
-                                            {value}
-                                        </span>
-                                    </div>
-                                ))}
+                                            <img
+                                                src={`https://ordinals.com/content/${inscriptionId}`}
+                                                alt={traitValue}
+                                                className="spark-modal__trait-image"
+                                            />
+                                        </div>
+                                    ) : null;
+                                })}
                             </div>
                         )}
                     </div>
@@ -298,7 +487,7 @@ function SparkModal({ isOpen, onClose, data, allCats, currentIndex, onNavigate, 
                             <span className="spark-modal__section-title">
                                 Activity ({transfers.length})
                             </span>
-                            <span className="spark-modal__chevron">{activityOpen ? '▼' : '▶'}</span>
+                            <span className="spark-modal__chevron">{activityOpen ? <ChevronDown size={16} /> : <ChevronRight size={16} />}</span>
                         </button>
                         {activityOpen && (
                             <>
@@ -312,7 +501,7 @@ function SparkModal({ isOpen, onClose, data, allCats, currentIndex, onNavigate, 
                                                     {new Date(transfer.timestamp).toLocaleDateString()}
                                                 </span>
                                                 <span className="spark-modal__transfer-addr">
-                                                    → {shortenAddress(transfer.address)}
+                                                    <ArrowRight size={12} /> {shortenAddress(transfer.address)}
                                                 </span>
                                             </div>
                                         ))}

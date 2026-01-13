@@ -17,18 +17,19 @@
     box-shadow: none !important;
 }
 
-/* Blurred backdrop */
+/* Blurred backdrop - Fixed so it doesn't scroll with content */
 .spark-modal__backdrop {
-    position: absolute;
+    position: fixed;
     inset: 0;
     background: var(--bg-overlay);
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
+    z-index: -1;
 }
 
-/* Navigation Bar - sits on top */
+/* Navigation Bar - Fixed on top */
 .spark-modal__navbar {
-    position: absolute;
+    position: fixed;
     top: 24px;
     left: 50%;
     transform: translateX(-50%);
@@ -42,7 +43,7 @@
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
     border-radius: 8px;
-    z-index: 10;
+    z-index: 100;
 }
 
 .spark-modal__navbar-left {
@@ -74,6 +75,7 @@
 
 .spark-modal__navbar-icon:hover {
     background: var(--interactive-bg-hover);
+    color: var(--text-primary);
 }
 
 .spark-modal__navbar-arrow {
@@ -93,6 +95,7 @@
 
 .spark-modal__navbar-arrow:hover:not(:disabled) {
     background: var(--interactive-bg-hover);
+    color: var(--text-primary);
 }
 
 .spark-modal__navbar-arrow:disabled {
@@ -150,14 +153,17 @@
     z-index: 1;
 }
 
-/* Info Panel - Left 30% - Transparent */
+/* Info Panel - Right side - Transparent */
 .spark-modal__info {
     width: 30%;
+    height: 100%;
     padding: 20px;
     display: flex;
     flex-direction: column;
     gap: 16px;
     background: transparent;
+    overflow-y: auto;
+    overflow-x: hidden;
 }
 
 .spark-modal__title {
@@ -174,6 +180,10 @@
     display: flex;
     flex-direction: column;
     gap: 8px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    padding: 12px;
 }
 
 .spark-modal__section-title {
@@ -196,7 +206,6 @@
     align-items: center;
     font-size: 12px;
     color: var(--text-primary);
-    border-bottom: 1px dashed var(--interactive-border);
     padding-bottom: 4px;
 }
 
@@ -212,6 +221,39 @@
     font-weight: bold;
 }
 
+/* Trait Image Grid */
+.spark-modal__traits-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+    padding: 8px 0;
+}
+
+.spark-modal__trait-card {
+    aspect-ratio: 1;
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 12px;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.spark-modal__trait-card:hover {
+    background: rgba(255, 255, 255, 0.17);
+    border-color: var(--accent);
+    transform: scale(1.02);
+}
+
+.spark-modal__trait-image {
+    width: 70%;
+    height: 70%;
+    object-fit: contain;
+}
+
 .spark-modal__history {
     display: flex;
     flex-direction: column;
@@ -224,7 +266,6 @@
     align-items: center;
     font-size: 11px;
     color: var(--text-primary);
-    border-bottom: 1px dashed var(--interactive-border);
     padding-bottom: 4px;
 }
 
@@ -347,9 +388,6 @@
 }
 
 /* Collapsible Section Styles */
-.spark-modal__section--collapsible {
-    border-top: 1px dashed var(--interactive-border);
-}
 
 .spark-modal__section-header {
     width: 100%;
@@ -389,6 +427,83 @@
     transition: transform 0.2s;
 }
 
+/* Inscription Details Styles */
+.spark-modal__details {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    padding: 8px 0;
+}
+
+.spark-modal__detail-item {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.spark-modal__detail-label {
+    font-size: 10px;
+    font-weight: 700;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+}
+
+.spark-modal__detail-value {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+    color: var(--text-primary);
+    font-weight: 500;
+    word-break: break-all;
+}
+
+.spark-modal__detail-secondary {
+    color: var(--text-tertiary);
+    font-size: 11px;
+}
+
+.spark-modal__copy-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    padding: 0;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 6px;
+    color: var(--text-secondary);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    flex-shrink: 0;
+}
+
+.spark-modal__copy-btn:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: var(--text-primary);
+    border-color: rgba(255, 255, 255, 0.25);
+}
+
+.spark-modal__copy-btn.copied {
+    background: rgba(34, 197, 94, 0.2);
+    border-color: rgba(34, 197, 94, 0.4);
+    color: #22c55e;
+}
+
+.spark-modal__detail-link {
+    color: var(--text-primary);
+    text-decoration: none;
+    border-bottom: 1px dashed var(--text-secondary);
+    transition: all 0.2s ease;
+}
+
+.spark-modal__detail-link:hover {
+    color: var(--accent);
+    border-bottom-color: var(--accent);
+}
+
 /* Thumbnail Strip (mobile portrait) */
 .spark-modal__thumbnail-strip {
     display: flex;
@@ -402,9 +517,13 @@
 /* Mobile Portrait Layout */
 .spark-modal.mobile-portrait .spark-modal__navbar {
     width: calc(100% - 24px);
+    max-width: calc(100% - 24px);
     top: 12px;
+    left: 50%;
+    transform: translateX(-50%);
     padding: 8px 12px;
     justify-content: space-between;
+    z-index: 101;
 }
 
 .spark-modal.mobile-portrait .spark-modal__navbar-left {
@@ -412,35 +531,57 @@
     justify-content: space-between;
 }
 
+.spark-modal.mobile-portrait {
+    align-items: flex-start;
+    overflow-y: auto;
+    overflow-x: hidden;
+    -webkit-overflow-scrolling: touch;
+}
+
 .spark-modal.mobile-portrait .spark-modal__canvas {
     flex-direction: column;
     width: 100%;
-    height: calc(100vh - 60px);
+    height: auto;
     max-width: 100%;
-    max-height: calc(100vh - 60px);
-    margin-top: 56px;
-    overflow-y: auto;
+    max-height: none;
+    margin-top: 80px;
+    overflow-y: visible;
+    /* Let parent spark-modal handle scroll */
+    padding-bottom: 60px;
+    z-index: 1;
 }
 
 .spark-modal.mobile-portrait .spark-modal__image-container {
     width: 100%;
-    height: 100vw;
-    /* Fixed square based on viewport width */
-    min-height: 100vw;
-    max-height: 100vw;
+    aspect-ratio: 1;
+    /* Keep it square */
+    height: auto;
+    min-height: auto;
+    max-height: none;
     flex-shrink: 0;
     margin-left: 0;
+    pointer-events: none;
+    /* Crucial: ensures touch gestures scroll the modal instead of being caught by iframe */
+}
+
+.spark-modal.mobile-portrait .spark-modal__image {
+    width: 100%;
+    height: 100%;
 }
 
 .spark-modal.mobile-portrait .spark-modal__info {
     width: 100%;
     padding: 16px;
     background: var(--bg-page);
+    height: auto;
+    /* Allow content to dictate height */
+    overflow-y: visible;
+    /* Let parent canvas handle scroll */
 }
 
-/* Responsive - stack on mobile */
+/* Responsive - stack on mobile - refined to avoid conflict with mobile-portrait class */
 @media (max-width: 768px) {
-    .spark-modal__canvas {
+    .spark-modal:not(.mobile-portrait) .spark-modal__canvas {
         flex-direction: column-reverse;
         width: 100%;
         height: 100%;
@@ -449,7 +590,7 @@
         margin-top: 70px;
     }
 
-    .spark-modal__info {
+    .spark-modal:not(.mobile-portrait) .spark-modal__info {
         width: 100%;
         height: auto;
         padding: 16px;
@@ -457,7 +598,7 @@
         border-top: none;
     }
 
-    .spark-modal__image-container {
+    .spark-modal:not(.mobile-portrait) .spark-modal__image-container {
         width: 100%;
         flex: 1;
         margin-left: 0;
@@ -468,7 +609,10 @@
 @media (max-width: 576px) {
     .spark-modal__navbar {
         width: calc(100% - 24px);
+        max-width: calc(100% - 24px);
         top: 12px;
+        left: 50%;
+        transform: translateX(-50%);
         padding: 6px 10px;
     }
 
@@ -489,7 +633,8 @@
     }
 
     .spark-modal__canvas {
-        margin-top: 60px;
+        margin-top: 80px;
+        /* Keep consistent with mobile-portrait spacing */
     }
 
     .spark-modal__info {

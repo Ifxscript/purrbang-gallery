@@ -6,12 +6,14 @@
 
 /* Mobile keyboard support */
 html,
-body {
+body,
+#root {
+  height: 100%;
+  margin: 0;
+  padding: 0;
   min-height: 100vh;
   min-height: -webkit-fill-available;
-  /* iOS Safari safe area */
   min-height: 100dvh;
-  /* Dynamic viewport - adjusts when mobile keyboard opens */
 }
 
 :root {
@@ -39,21 +41,23 @@ body {
   --border-subtle: #225045;
 
   /* Interactive */
-  --interactive-bg: #697431;
-  --interactive-bg-hover: #a2b568;
-  --interactive-border: #697431;
-  --interactive-border-hover: #a2b568;
+  --interactive-bg: #16352F;
+  --interactive-bg-hover: #225045;
+  --interactive-border: #225045;
+  --interactive-border-hover: #225045;
 
   /* Button Colors */
-  --btn-primary: #BF6734;
-  --btn-primary-hover: #d47840;
+  --btn-primary: #697431;
+  --btn-primary-hover: #a2b568;
 
   /* Accent Colors */
-  --accent: #BF6734;
+  --accent: #697431;
+  /* #BF6734; */
   --success: #8BB69A;
   --btc: #DBF0DD;
-  --link: #BF6734;
-  --link-hover: #d47840;
+  --link: #a2b568;
+  /* #BF6734; */
+  --link-hover: #fff;
 
   /* Trait Colors */
   --trait-outfit: rgba(139, 182, 154, 0.7);
@@ -81,7 +85,7 @@ body {
 /* ========== LIGHT MODE OVERRIDES ========== */
 .light {
   --bg-page: #E3DDCD;
-  --bg-elevated: #E3DDCD;
+  --bg-elevated: #D9D2C5;
   --bg-card: #000;
   --bg-overlay: rgba(227, 221, 205, 0.9);
   /* --bg-overlay-gradient: linear-gradient(transparent, rgba(227, 221, 205, 0.9)); */
@@ -97,10 +101,10 @@ body {
   /* --border-strong: #000; */
   --border-subtle: #bbb;
 
-  /* --interactive-bg: rgba(0, 0, 0, 0.05);
-  --interactive-bg-hover: rgba(0, 0, 0, 0.1);
-  --interactive-border: rgba(0, 0, 0, 0.1);
-  --interactive-border-hover: rgba(0, 0, 0, 0.2); */
+  --interactive-bg: ##D9D2C5;
+  --interactive-bg-hover: #BCB6AB;
+  --interactive-border: #BCB6AB;
+  --interactive-border-hover: #BCB6AB;
 
   --btc: #111;
   --link-hover: #747bff;
@@ -140,11 +144,21 @@ button {
   transition: border-color 0.25s;
 }
 
-button:hover {
-  border-color: var(--link);
+
+
+/* Remove click/tap outlines - only show for keyboard navigation */
+button:focus {
+  outline: none;
 }
 
-button:focus,
 button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+/* Remove mobile tap highlight */
+button,
+a,
+[role="button"] {
+  -webkit-tap-highlight-color: transparent;
 }

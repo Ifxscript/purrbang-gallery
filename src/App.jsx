@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback, useRef } from 'react';
 import CollectionPage from './pages/CollectionPage';
 import LandingPage from './pages/LandingPage';
 import LoadingScreen from './pages/LoadingScreen';
+import TraitsPage from './pages/TraitsPage';
 
 const MIN_LOADING_TIME = 2000; // 2 seconds minimum
 
@@ -54,38 +55,30 @@ function App() {
     return () => clearInterval(interval);
   }, [page]);
 
-  // Sync page state with URL hash
-  useEffect(() => {
-    const handleHashChange = () => {
-      const hash = window.location.hash;
-      if (hash === '#/collection') {
-        setPage('collection');
-      } else if (hash === '#/loading') {
-        setPage('loading');
-      } else {
-        setPage('landing');
-      }
-    };
-
-    window.addEventListener('hashchange', handleHashChange);
-    // Initial check
-    handleHashChange();
-
-    return () => window.removeEventListener('hashchange', handleHashChange);
-  }, []);
+  // No longer using hash-based routing as requested for cleaner URLs
 
   const handleEnter = useCallback(() => {
-    window.location.hash = '#/loading';
     setPage('loading');
   }, []);
 
   const handleLoadingComplete = useCallback(() => {
-    window.location.hash = '#/collection';
+    setPage('collection');
+  }, []);
+
+  const handleNavigateToTraits = useCallback(() => {
+    setPage('traits');
+  }, []);
+
+  const handleNavigateToCollection = useCallback(() => {
     setPage('collection');
   }, []);
 
   if (page === 'collection') {
-    return <CollectionPage />;
+    return <CollectionPage onNavigateToTraits={handleNavigateToTraits} />;
+  }
+
+  if (page === 'traits') {
+    return <TraitsPage onNavigateToCollection={handleNavigateToCollection} />;
   }
 
   if (page === 'loading') {

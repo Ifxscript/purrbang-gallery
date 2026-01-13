@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { X, Search, ChevronUp, ChevronDown, Check } from 'lucide-react';
 import './FilterSidebar.css';
 
 function FilterSidebar({ isOpen, onClose, filters, traitOptions, onFilterChange, onClearFilters, activeFiltersCount }) {
@@ -56,12 +57,12 @@ function FilterSidebar({ isOpen, onClose, filters, traitOptions, onFilterChange,
         <aside className="filter-sidebar">
             <div className="filter-sidebar__header">
                 <h2 className="filter-sidebar__title">Traits</h2>
-                <button className="filter-sidebar__close" onClick={onClose}>×</button>
+                <button className="filter-sidebar__close" onClick={onClose}><X size={18} /></button>
             </div>
 
             {/* Search Box */}
             <div className="filter-sidebar__search">
-                <span className="filter-sidebar__search-icon">⌕</span>
+                <Search size={14} className="filter-sidebar__search-icon" />
                 <input
                     type="text"
                     className="filter-sidebar__search-input"
@@ -92,7 +93,7 @@ function FilterSidebar({ isOpen, onClose, filters, traitOptions, onFilterChange,
                                 </span>
                                 <span className="filter-sidebar__trait-info">
                                     <span className="filter-sidebar__trait-count">{getTraitCount(trait)}</span>
-                                    <span className="filter-sidebar__chevron">{isExpanded ? '∧' : '∨'}</span>
+                                    <span className="filter-sidebar__chevron">{isExpanded ? <ChevronUp size={14} /> : <ChevronDown size={14} />}</span>
                                 </span>
                             </button>
 
@@ -104,7 +105,7 @@ function FilterSidebar({ isOpen, onClose, filters, traitOptions, onFilterChange,
                                         onClick={() => onFilterChange(trait, '')}
                                     >
                                         <span className="filter-sidebar__checkbox">
-                                            {!selectedValue && '■'}
+                                            {!selectedValue && <Check size={10} />}
                                         </span>
                                         <span className="filter-sidebar__option-name">All</span>
                                     </button>
@@ -116,7 +117,7 @@ function FilterSidebar({ isOpen, onClose, filters, traitOptions, onFilterChange,
                                             onClick={() => onFilterChange(trait, value)}
                                         >
                                             <span className="filter-sidebar__checkbox">
-                                                {selectedValue === value && '■'}
+                                                {selectedValue === value && <Check size={10} />}
                                             </span>
                                             <span className="filter-sidebar__option-name">{value}</span>
                                         </button>
